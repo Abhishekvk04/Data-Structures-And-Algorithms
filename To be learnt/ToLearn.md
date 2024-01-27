@@ -4,7 +4,7 @@
 -> prime number<br>
 -> gcd and lcm<br>
 -> binary to decimal conversion<br>
--> 
+-> String problems
 
 ## week 2
 -> pattern problems<br>
