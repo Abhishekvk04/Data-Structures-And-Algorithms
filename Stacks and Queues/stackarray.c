@@ -1,11 +1,37 @@
 #include<stdio.h>
-#define Max 5
+#include<stdlib.h>
+#define Max 5   //defining the max size
 
+//global variables
 int top =-1;
 int stack_arr[Max];
 
+//Functions
+int isFull(){
+    if (top == Max - 1)
+        return 1;
+    else
+        return 0;
+}
+
+int isEmpty(){
+    if(top == -1)
+        return -1;
+    else
+        return 0;
+}
+
+int peek(){
+    if(isEmpty()){
+        printf("Stack underflow\n");
+        exit(1);
+    }
+    return stack_arr[top];
+}
+
+//push the elements into the stack
 void push(int data){
-    if (top == Max -1 ){
+    if (isFull()){
         printf("Stack overflow\n");
         return;
     }
@@ -14,9 +40,10 @@ void push(int data){
     printf("%d\n",data);
 }
 
+//pop the elements from the stack
 int pop(){
     int value;
-    if (top == -1 ){
+    if (isEmpty()){
         printf("Stack underflow\n");
         exit(1); //abnormal termination of the program
     }
@@ -24,8 +51,10 @@ int pop(){
     top -=1;
     printf("%d\n",value);
 }
+
+//printing all the remaining elements in the stack
 void print(){
-    if (top == -1 ){
+    if (isEmpty()){
         printf("Stack underflow\n");
         exit(1); //abnormal termination of the program
     }
@@ -34,20 +63,49 @@ void print(){
     }
 }
 
+//executing the functions in the main function
 int main(){
-    int data;
-    printf("Pushing the elements into stack\n");
-    push(1);
-    push(2);
-    push(3);
-    push(4);
-    push(5);
-    push(6);
-    printf("Poping the elements into stack\n");
-    data = pop();
-    data = pop();
-    printf("The remaining element in the stack are : \n");
-    print();
+    int data, choice;
+    
+    while(1){ // 1=true repeates the program infinite times
+        printf("\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Print the top element\n");
+        printf("4. Print all the elements of the stack\n");
+        printf("5. Quit\n");
+        printf("Please Enter your choice\n");
+        scanf("%d", &choice);
+        
+        switch(choice) {
+            case 1:
+                printf("Enter the element to be pushed: ");
+                scanf("%d", &data);
+                push(data);
+                break;
+            
+            case 2:
+                data = pop();
+                printf("Deleted element is %d\n",data);
+                break;
+                
+            case 3:
+                printf("The topmost element of the stack is %d\n",peek());
+                break;
+                
+            case 4:
+                print();
+                break;
+                
+            case 5:
+                exit(1);
+                
+            default:
+                printf("Wrong choice\n");
+        }
+    }
+    
     return 0;
 
 }
+
