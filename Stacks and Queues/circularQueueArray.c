@@ -1,101 +1,81 @@
-// Circular Queue implementation in C
-
-#include <stdio.h>
-
-#define SIZE 5
-
-int items[SIZE];
-int front = -1, rear = -1;
-
-// Check if the queue is full
-int isFull() {
-  if ((front == rear + 1) || (front == 0 && rear == SIZE - 1)) return 1;
-  return 0;
+#include<stdio.h>
+#include<stdlib.h>
+int *queue;
+int front, rear, capacity;
+int pop()
+{
+  front = (front+1)%capacity;
+  return queue[front];
 }
-
-// Check if the queue is empty
-int isEmpty() {
-  if (front == -1) return 1;
-  return 0;
-}
-
-// Adding an element
-void enQueue(int element) {
-  if (isFull())
-    printf("\n Queue is full!! \n");
-  else {
-    if (front == -1) front = 0;
-    rear = (rear + 1) % SIZE;
-    items[rear] = element;
-    printf("\n Inserted -> %d", element);
-  }
-}
-
-// Removing an element
-int deQueue() {
-  int element;
-  if (isEmpty()) {
-    printf("\n Queue is empty !! \n");
-    return (-1);
-  } else {
-    element = items[front];
-    if (front == rear) {
-      front = -1;
-      rear = -1;
-    } 
-    // Q has only one element, so we reset the 
-    // queue after dequeing it. ?
-    else {
-      front = (front + 1) % SIZE;
+int push(int data)
+{
+  int *newQueue, i;
+  if( (rear+1)%capacity ==front%capacity )
+  {
+    printf("Extending Queue (new capacity=%d)\n", 2*capacity);
+    newQueue = (int*)malloc(capacity * 2 * sizeof(int));
+    for(i=1;front!=rear;i++)
+    {
+      newQueue[i] = pop();
     }
-    printf("\n Deleted element -> %d \n", element);
-    return (element);
+    rear = i-1;
+    front = 0;
+    capacity *= 2;
+    free(queue);
+    queue = newQueue;
+  }
+  rear = (rear+1)%capacity;
+  queue[rear] = data;
+}
+
+void display()
+{
+  printf("Elements:\n");
+  if(front == rear)
+  {
+    printf("Queue Empty\n");
+  }
+  for(int i = (front+1) % capacity ; i != (rear+1) % capacity ; i = (i+1) % capacity )
+  {
+    printf("%d\n", queue[i]);
   }
 }
 
-// Display the queue
-void display() {
-  int i;
-  if (isEmpty())
-    printf(" \n Empty Queue\n");
-  else {
-    printf("\n Front -> %d ", front);
-    printf("\n Items -> ");
-    for (i = front; i != rear; i = (i + 1) % SIZE) {
-      printf("%d ", items[i]);
-    }
-    printf("%d ", items[i]);
-    printf("\n Rear -> %d \n", rear);
-  }
-}
-
-int main()  
-{  
-    int choice=1 , x;   
-      
-    while(choice<4 && choice!=0)  
-    {  
-    printf("\nPress 1: Insert an element");  
-    printf("\nPress 2: Delete an element");  
-    printf("\nPress 3: Display the element");  
-    printf("\nEnter your choice: ");  
-    scanf("%d", &choice);  
-      
-    switch(choice)  
-    {  
-          
-        case 1:  
-      
-        printf("Enter the element which is to be inserted: ");  
-        scanf("%d", &x);  
-        enQueue(x);  
-        break;  
-        case 2:  
-        deQueue();  
-        break;  
-        case 3:  
-        display();  
+int main()
+{
+  front = 0;
+  rear = 0;
+  capacity = 2;
+  queue = (int*)malloc(capacity* sizeof(int));
   
-    }}  
-    return 0;  
-}  
+  int choice =4;
+  int num;
+  
+  do{
+      printf("1.push\n2.pop.\n3.display\n4.exit\n");
+      
+      scanf("%d",&choice);
+    switch(choice)
+    {
+      case 1:
+        scanf("%d",&num);
+        push(num);
+        break;
+      case 2:
+        if(front==rear)
+        printf("Queue Empty\n");
+        else
+        printf("element removed is %d\n",pop());
+        break;
+      case 3:
+        display();
+        break;
+      case 4:
+        break;
+      default : printf("Invalid Entry\n");
+    }
+    printf("\n");
+  }
+  while(choice!=4);
+  return 0;
+}
